@@ -21,6 +21,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl
           curl -sSL https://install.salesforce.com/sfdx-cli/install | bash
+          # Ensure that Salesforce CLI is available in the PATH
+          export PATH=$PATH:/usr/local/bin
 
       - name: Authenticate with Salesforce
         run: |
