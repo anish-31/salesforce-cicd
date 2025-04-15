@@ -3,10 +3,10 @@ name: Salesforce CI/CD Pipeline
 on:
   push:
     branches:
-      - feature/login-page  # or the branch you're working with
+      - main  # Trigger only when pushing to the main branch
   pull_request:
     branches:
-      - main
+      - main  # Trigger on PR merging into main
 
 jobs:
   deploy:
