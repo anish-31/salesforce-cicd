@@ -1,0 +1,37 @@
+name: Salesforce CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - feature/login-page  # or the branch you're working with
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Salesforce CLI
+        run: |
+          curl https://developer.salesforce.com/media/sfdx/sfdx-cli/channels/stable/sfdx-cli-linux-amd64.tar.xz > sfdx.tar.xz
+          tar -xvf sfdx.tar.xz
+          sudo ./install
+
+      - name: Authenticate with Salesforce
+        run: |
+          echo "Authenticating with Salesforce..."
+          sfdx auth:jwt:grant --clientid ${{ secrets.SF_CLIENT_ID }} --jwtkeyfile assets/server.key --username ${{ secrets.SF_USERNAME }} --instanceurl https://login.salesforce.com
+
+      - name: Deploy to Salesforce
+        run: |
+          echo "Deploying metadata to Salesforce..."
+          sfdx force:source:deploy -p force-app --targetusername ${{ secrets.SF_USERNAME }} --checkonly
+
+      - name: Run Apex Tests
+        run: |
+          echo "Running Apex tests..."
+          sfdx force:apex:test:run --resultformat human --targetusername ${{ secrets.SF_USERNAME }}
