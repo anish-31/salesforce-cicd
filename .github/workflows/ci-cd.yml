@@ -17,9 +17,10 @@ jobs:
 
       - name: Set up Salesforce CLI
         run: |
-          curl -L https://developer.salesforce.com/media/sfdx/sfdx-cli/channels/stable/sfdx-cli-linux-amd64.tar.xz -o sfdx.tar.xz
-          tar -xvJf sfdx.tar.xz
-          sudo ./install
+          # Install Salesforce CLI using the official method
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -sSL https://install.salesforce.com/sfdx-cli/install | bash
 
       - name: Authenticate with Salesforce
         run: |
